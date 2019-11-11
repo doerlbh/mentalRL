@@ -1,7 +1,10 @@
 # mentalRL
 
-Code for our paper: "A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry" by [Baihan Lin](http://www.columbia.edu/~bl2681/) (Columbia), [Guillermo Cecchi](https://researcher.watson.ibm.com/researcher/view.php?person=us-gcecchi) (IBM Research), [Djallel Bouneffouf](https://scholar.google.com/citations?user=i2a1LUMAAAAJ&hl=en) (IBM Research), [Jenna Reinen](http://campuspress.yale.edu/jennareinen/) (IBM Research) and [Irina Rish](https://sites.google.com/site/irinarish/) (Mila, UdeM). 
+Code for our paper: 
 
+**"A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry"** by [Baihan Lin](http://www.columbia.edu/~bl2681/) (Columbia), [Guillermo Cecchi](https://researcher.watson.ibm.com/researcher/view.php?person=us-gcecchi) (IBM Research), [Djallel Bouneffouf](https://scholar.google.com/citations?user=i2a1LUMAAAAJ&hl=en) (IBM Research), [Jenna Reinen](http://campuspress.yale.edu/jennareinen/) (IBM Research) and [Irina Rish](https://sites.google.com/site/irinarish/) (Mila, UdeM). 
+
+For latest full paper: https://arxiv.org/abs/1906.11286
 
 All the experimental results can be reproduced using the code in this repository. Feel free to contact me by doerlbh@gmail.com if you have any question about our work.
 
@@ -30,5 +33,5 @@ If you find this work helpful, please try the models out and cite our work. Than
 
 ## Acknowledgements 
 
-The PacMan game was built upon Berkeley AI Pac-Man http://inst.eecs.berkeley.edu/~cs188/pacman/project_overview.html. We modify many of the original files and included our comparison.
+The PacMan game was built upon Berkeley AI Pac-Man http://ai.berkeley.edu/project_overview.html. We modify many of the original files and included our comparison.
 
