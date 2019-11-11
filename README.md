@@ -1,6 +1,7 @@
 # mentalRL
 
-![mentalRL](./resources/mentalRL.png "mentalRL")
+
+![mentalRL](./img/mentalRL.png "mentalRL")
 
 (image credit to [HBR](https://hbr.org/2018/10/ais-potential-to-diagnose-and-treat-mental-illness))
 
@@ -52,56 +53,66 @@ If you find this work helpful, please try the models out and cite our work. Than
 ## Videos of mental agents playing PacMan
 
 
+
 * AD ("Alzheimer's Disease")
 
-![AD](./resources/AD.gif "AD")
+![AD](./img/AD.gif "AD")
+
 
 * ADD ("addition")
 
-![ADD](./resources/ADD.gif "ADD")
+![ADD](./img/ADD.gif "ADD")
+
 
 * ADHD ("ADHD")
 
-![ADD](./resources/ADHD.gif "ADHD")
+![ADD](./img/ADHD.gif "ADHD")
+
 
 * bvFTD (the behavioral variant of Frontotemporal dementia)
 
-![bvFTD](./resources/PD.gif "bvFTD")
+![bvFTD](./img/PD.gif "bvFTD")
+
 
 * CP ("Chronic Pain")
 
-![CP](./resources/PD.gif "CP")
+![CP](./img/PD.gif "CP")
+
 
 * PD ("Parkinson's Disease")
 
-![PD](./resources/PD.gif "PD")
+![PD](./img/PD.gif "PD")
+
 
 * M ("moderate")
 
-![M](./resources/M.gif "M")
+![M](./img/M.gif "M")
+
 
 * SQL ("Split Q-Learning")
 
-![SQL](./resources/SQL.gif "SQL")
+![SQL](./img/SQL.gif "SQL")
+
 
 * PQL ("Positive Q-Learning")
 
-![PQL](./resources/PQL.gif "PQL")
+![PQL](./img/PQL.gif "PQL")
 
 
 * NQL ("Negative Q-Learning")
 
-![NQL](./resources/NQL.gif "NQL")
+![NQL](./img/NQL.gif "NQL")
 
 
 * QL ("Q-Learning")
 
-![QL](./resources/QL.gif "QL")
+![QL](./img/QL.gif "QL")
 
 
 * DQL ("Double Q-Learning")
 
-![DQL](./resources/DQL.gif "DQL")
+![DQL](./img/DQL.gif "DQL")
+
 
 
 ## Acknowledgements 
