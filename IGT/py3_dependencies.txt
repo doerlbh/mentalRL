@@ -1,0 +1,10 @@
+# Python 3 Dependencies:
+
+numpy
+seaborn
+pandas
+matplotlib
+scipy
+statsmodels
+
+
