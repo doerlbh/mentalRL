@@ -56,7 +56,7 @@ If you find this work helpful, please try the models out and cite our work. Than
 
 * AD ("Alzheimer's Disease")
 
-![AD](./img/AD.gif "AD")
+![AZ](./img/AD.gif "AD")
 
 
 * ADD ("addition")
@@ -66,17 +66,17 @@ If you find this work helpful, please try the models out and cite our work. Than
 
 * ADHD ("ADHD")
 
-![ADD](./img/ADHD.gif "ADHD")
+![ADHD](./img/ADHD.gif "ADHD")
 
 
 * bvFTD (the behavioral variant of Frontotemporal dementia)
 
-![bvFTD](./img/PD.gif "bvFTD")
+![bvFTD](./img/bvFTD.gif "bvFTD")
 
 
 * CP ("Chronic Pain")
 
-![CP](./img/PD.gif "CP")
+![CP](./img/CP.gif "CP")
 
 
 * PD ("Parkinson's Disease")
