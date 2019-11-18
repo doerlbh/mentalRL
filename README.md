@@ -20,6 +20,13 @@ For the latest full paper: https://arxiv.org/abs/1906.11286
 All the experimental results can be reproduced using the code in this repository. Feel free to contact me by doerlbh@gmail.com if you have any question about our work.
 
 
+## Info
+
+Language: Python3, Python2, bash
+
+
+Platform: MacOS, Linux, Windows
+
 
 ## Citation
 
