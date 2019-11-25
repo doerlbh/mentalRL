@@ -32,8 +32,10 @@ Language: Python3, Python2, bash
 
 
 Platform: MacOS, Linux, Windows
-
-
+  
+by Baihan Lin, Sep 2018
+  
+  
 ## Citation
 
 If you find this work helpful, please try the models out and cite our work. Thanks!
