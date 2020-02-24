@@ -7,7 +7,7 @@
 
  
 
-Code for our paper: 
+Code for our *AAMAS 2020* paper: 
 
 **"A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry"** 
 
