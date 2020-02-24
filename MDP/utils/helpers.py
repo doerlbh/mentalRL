@@ -15,7 +15,7 @@ import sys
 
 # load a prespecified scenario
 
-def load_IGT(scheme_id = 1):
+def load_IGT(scheme_id = 1,prefix=''):
     # Fridberg et al., 2009
     if scheme_id == 1: 
         def reward_from_A(N):
@@ -58,7 +58,7 @@ def load_IGT(scheme_id = 1):
             else:
                 return [50,np.random.normal(0, 0)]
     
-        fig_name = './figures/IGT_1.png'
+        fig_name = './figures/'+prefix+'IGT_1'
 
     elif scheme_id == 2: 
         def reward_from_A(N):
@@ -97,12 +97,12 @@ def load_IGT(scheme_id = 1):
             else:
                 return [50,np.random.normal(0, 0)]
     
-        fig_name = './figures/IGT_2.png'
+        fig_name = './figures/'+prefix+'IGT_2'
                 
     return fig_name,reward_from_A,reward_from_B,reward_from_C,reward_from_D
 
 
-def load_scenario(scenario_id = 1, is_flipped=False):
+def load_scenario(scenario_id = 1,is_flipped=False,keyword='MDP',prefix=''):
     if scenario_id == 1:
         def reward_from_B():
             return np.random.normal(-0.5, 10)
@@ -111,7 +111,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_1.png'
+        fig_name = './figures/'+prefix+''+keyword+'_1'
 
     elif scenario_id == 2:
         def reward_from_B():
@@ -121,7 +121,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_2.png'
+        fig_name = './figures/'+prefix+''+keyword+'_2'
 
     elif scenario_id == 3:
         def reward_from_B():
@@ -131,7 +131,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 10)
         label_C = 'right: N(0,10)'
-        fig_name = './figures/MDP_3.png' 
+        fig_name = './figures/'+prefix+''+keyword+'_3' 
 
     elif scenario_id == 4:
         def reward_from_B():
@@ -141,7 +141,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_4.png' 
+        fig_name = './figures/'+prefix+''+keyword+'_4' 
 
     elif scenario_id == 5:
         def reward_from_B():
@@ -151,7 +151,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 10)
         label_C = 'right: N(0,10)'
-        fig_name = './figures/MDP_5.png'
+        fig_name = './figures/'+prefix+''+keyword+'_5'
 
     elif scenario_id == 6:
         def reward_from_B():
@@ -164,7 +164,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
 
         def reward_from_C():            return np.random.normal(0, 10)
         label_C = 'right: N(0,10)'
-        fig_name = './figures/MDP_6.png'
+        fig_name = './figures/'+prefix+''+keyword+'_6'
 
     elif scenario_id == 7:
         def reward_from_B():
@@ -178,7 +178,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_7.png'
+        fig_name = './figures/'+prefix+''+keyword+'_7'
 
     elif scenario_id == 8:
         def reward_from_B():
@@ -192,7 +192,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_8.png'
+        fig_name = './figures/'+prefix+''+keyword+'_8'
 
     elif scenario_id == 9:
         def reward_from_B():
@@ -207,7 +207,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 10)
         label_C = 'right: N(0,10)'
-        fig_name = './figures/MDP_9.png'
+        fig_name = './figures/'+prefix+''+keyword+'_9'
 
     elif scenario_id == 10:
         def reward_from_B():
@@ -221,7 +221,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         def reward_from_C():
             return np.random.normal(0, 10)
         label_C = 'right: N(0,10)'
-        fig_name = './figures/MDP_10.png'
+        fig_name = './figures/'+prefix+''+keyword+'_10'
 
     elif scenario_id == 11:
         def reward_from_B():
@@ -236,7 +236,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             p = np.random.random()
             return np.random.normal(0, 1)
         label_C = 'right: N(0,1)'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 12:
         def reward_from_B():
@@ -254,7 +254,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 13:
         def reward_from_B():
@@ -272,7 +272,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 14:
         def reward_from_B():
@@ -286,7 +286,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 15:
         def reward_from_B():
@@ -300,7 +300,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 16:
         def reward_from_B():
@@ -314,7 +314,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 17:
         def reward_from_B():
@@ -328,7 +328,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(5, 1)
         label_C = 'right: bimodal N(-5,1):N(5,1) = 1:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 18:
         def reward_from_B():
@@ -346,7 +346,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(15, 1)
         label_C = 'right: bimodal N(-5,1):N(15,1) = 3:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 19:
         def reward_from_B():
@@ -364,7 +364,7 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(15, 1)
         label_C = 'right: bimodal N(-5,1):N(15,1) = 3:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id == 20:
         def reward_from_B():
@@ -383,64 +383,31 @@ def load_scenario(scenario_id = 1, is_flipped=False):
             else:
                 return np.random.normal(15, 1)
         label_C = 'right: bimodal N(-5,1):N(15,1) = 3:1'
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
-    elif scenario_id < 121:
+    elif scenario_id == 1000:
 
-        pfB = np.random.random()
-        p1mB = np.random.randint(-100,100)
-        p1sB = np.random.randint(0,20)
-        p2mB = np.random.randint(-100,100)
-        p2sB = np.random.randint(0,20)
-        
-        pfC = np.random.random()
-        p1mC = np.random.randint(-100,100)
-        p1sC = np.random.randint(0,20)
-        p2mC = np.random.randint(-100,100)
-        p2sC = np.random.randint(0,20)
-        
-        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
-            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
-        
-        def reward_from_B():
-            p = np.random.random()
-            if (p < pfB):
-                return np.random.normal(p1mB, p1sB)
-            else:
-                return np.random.normal(p2mB, p2sB)
-        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
-
-        def reward_from_C():
-            p = np.random.random()
-            if (p < pfC):
-                return np.random.normal(p1mC, p1sC)
-            else:
-                return np.random.normal(p2mC, p2sC)
-        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
-
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
-
-    elif scenario_id < 221:
-
-        pfB1 = np.random.random()
-        pfB2 = np.random.random()
+        pfB1 = 0.04
+        pfB2 = 0.42
         if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
-        p1mB = np.random.randint(-100,100)
-        p1sB = np.random.randint(0,20)
-        p2mB = np.random.randint(-100,100)
-        p2sB = np.random.randint(0,20)
-        p3mB = np.random.randint(-100,100)
-        p3sB = np.random.randint(0,20)
+        p1mB = -0.36
+        p1sB = 0
+        p2mB = -0.11
+        p2sB = 0.06
+        p3mB = -0.39
+        p3sB = 0.05
         
-        pfC1 = np.random.random()
-        pfC2 = np.random.random()
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
         if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
-        p1mC = np.random.randint(-100,100)
-        p1sC = np.random.randint(0,20)
-        p2mC = np.random.randint(-100,100)
-        p2sC = np.random.randint(0,20)
-        p3mC = np.random.randint(-100,100)
-        p3sC = np.random.randint(0,20)
+        p1mC = 0.1
+        p1sC = 0.02
+        p2mC = -0.38
+        p2sC = 0.05
+        p3mC = -0.06
+        p3sC = 0.06
         
         if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
             pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
@@ -465,7 +432,922 @@ def load_scenario(scenario_id = 1, is_flipped=False):
                 return np.random.normal(p3mC, p3sC)
         label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
 
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -0.36
+        p1sB = 0
+        p2mB = -0.11
+        p2sB = 0.06
+        p3mB = -0.39
+        p3sB = 0.05
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 0.1
+        p1sC = 0.02
+        p2mC = -0.38
+        p2sC = 0.05
+        p3mC = -0.06
+        p3sC = 0.06
+        
+    elif scenario_id == 1001:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 6
+        p3mB = -39
+        p3sB = 5
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1002:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = 0
+        p2sB = 6
+        p3mB = -50
+        p3sB = 5
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1003:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 6
+        p3mB = -39
+        p3sB = 5
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -50
+        p2sC = 5
+        p3mC = 0
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1004:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -20
+        p2sB = 6
+        p3mB = -30
+        p3sB = 5
+        
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1005:
+
+        pfB1 = 0.0
+        pfB2 = 0.4
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 6
+        p3mB = -39
+        p3sB = 5
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.0
+        pfC2 = 0.07
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+        
+    elif scenario_id == 1006:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 12
+        p3mB = -39
+        p3sB = 10
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1007:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 3
+        p3mB = -39
+        p3sB = 2
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 2
+        p2mC = -38
+        p2sC = 5
+        p3mC = -6
+        p3sC = 6
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+                                
+    elif scenario_id == 1008:
+
+        pfB1 = 0.04
+        pfB2 = 0.42
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = -36
+        p1sB = 0
+        p2mB = -11
+        p2sB = 6
+        p3mB = -39
+        p3sB = 5
+        
+#         pfC1 = np.random.random()
+#         pfC2 = np.random.random()
+        pfC1 = 0.03
+        pfC2 = 0.08
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = 10
+        p1sC = 4
+        p2mC = -38
+        p2sC = 10
+        p3mC = -6
+        p3sC = 12
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+                                
+    elif scenario_id == 1009:
+
+        pfB = 0.42
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.07
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1010:
+        
+        pfB = 0.42
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.07
+        p1mC = -50
+        p1sC = 10
+        p2mC = 0
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+                                                                
+    elif scenario_id == 1011:
+
+        pfB = 0.3
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.07
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+        
+    elif scenario_id == 1012:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.07
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1013:
+
+        pfB = 0.3
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.3
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1014:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.3
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1015:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.3
+        p1mC = -38
+        p1sC = 5
+        p2mC = -6
+        p2sC = 6
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+    
+    elif scenario_id == 1016:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.7
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+    
+    elif scenario_id == 1017:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.7
+        p1mC = -38
+        p1sC = 5
+        p2mC = -6
+        p2sC = 6
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)                                                                        
+                                                                        
+    elif scenario_id == 1018:
+
+        pfB = 0.3
+        p1mB = -11
+        p1sB = 6
+        p2mB = -39
+        p2sB = 5
+        
+        pfC = 0.3
+        p1mC = -38
+        p1sC = 5
+        p2mC = -6
+        p2sC = 6
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)                                                                        
+
+    elif scenario_id == 1019:
+
+        pfB = 0.7
+        p1mB = -11
+        p1sB = 12
+        p2mB = -39
+        p2sB = 10
+        
+        pfC = 0.3
+        p1mC = -38
+        p1sC = 10
+        p2mC = -6
+        p2sC = 12
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id == 1020:
+
+        pfB = 0.7
+        p1mB = 6
+        p1sB = 6
+        p2mB = -22
+        p2sB = 5
+        
+        pfC = 0.7
+        p1mC = 11
+        p1sC = 12
+        p2mC = -21
+        p2sC = 10
+        
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+        
+
+    elif scenario_id < 121:
+
+        pfB = np.random.random()
+        p1mB = np.random.randint(-100,100)
+        p1sB = np.random.randint(0,20)
+        p2mB = np.random.randint(-100,100)
+        p2sB = np.random.randint(0,20)
+          
+        pfC = np.random.random()
+        p1mC = np.random.randint(-100,100)
+        p1sC = np.random.randint(0,20)
+        p2mC = np.random.randint(-100,100)
+        p2sC = np.random.randint(0,20)
+                    
+        if pfB*p1mB+(1-pfB)*p2mB > pfC*p1mC+(1-pfC)*p2mC:
+            pfB,p1mB,p1sB,p2mB,p2sB,pfC,p1mC,p1sC,p2mC,p2sC = pfC,p1mC,p1sC,p2mC,p2sC,pfB,p1mB,p1sB,p2mB,p2sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB):
+                return np.random.normal(p1mB, p1sB)
+            else:
+                return np.random.normal(p2mB, p2sB)
+        label_B = 'left: bimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+') = {0:.2f}'.format(pfB)+':{0:.2f}'.format(1-pfB)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC):
+                return np.random.normal(p1mC, p1sC)
+            else:
+                return np.random.normal(p2mC, p2sC)
+        label_C = 'right: bimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+') = {0:.2f}'.format(pfC)+':{0:.2f}'.format(1-pfC)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
+
+    elif scenario_id < 221:
+
+        pfB1 = np.random.random()
+        pfB2 = np.random.random()
+        if pfB1 > pfB2: pfB1,pfB2 = pfB2,pfB1
+        p1mB = np.random.randint(-100,100)
+        p1sB = np.random.randint(0,50)
+        p2mB = np.random.randint(-100,100)
+        p2sB = np.random.randint(0,50)
+        p3mB = np.random.randint(-100,100)
+        p3sB = np.random.randint(0,50)
+        
+        pfC1 = np.random.random()
+        pfC2 = np.random.random()
+        if pfC1 > pfC2: pfC1,pfC2 = pfC2,pfC1
+        p1mC = np.random.randint(-100,100)
+        p1sC = np.random.randint(0,50)
+        p2mC = np.random.randint(-100,100)
+        p2sC = np.random.randint(0,50)
+        p3mC = np.random.randint(-100,100)
+        p3sC = np.random.randint(0,50)
+        
+        if pfB1*p1mB+(pfB2-pfB1)*p2mB+(1-pfB2)*p3mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(1-pfC2)*p3mC:
+            pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC = pfC1,pfC2,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,pfB1,pfB2,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB
+        
+        def reward_from_B():
+            p = np.random.random()
+            if (p < pfB1):
+                return np.random.normal(p1mB, p1sB)
+            elif (p < pfB2):
+                return np.random.normal(p2mB, p2sB)
+            else:
+                return np.random.normal(p3mB, p3sB)
+        label_B = 'left: trimodal N('+str(p1mB)+','+str(p1sB)+'):N('+str(p2mB)+','+str(p2sB)+'):N('+str(p3mB)+','+str(p3sB)+') = {0:.2f}'.format(pfB1)+':{0:.2f}'.format(pfB2-pfB1)+':{0:.2f}'.format(1-pfB2)
+
+        def reward_from_C():
+            p = np.random.random()
+            if (p < pfC1):
+                return np.random.normal(p1mC, p1sC)
+            elif (p < pfC2):
+                return np.random.normal(p2mC, p2sC)
+            else:
+                return np.random.normal(p3mC, p3sC)
+        label_C = 'right: trimodal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(1-pfC2)
+
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
 
     elif scenario_id < 321:
 
@@ -476,13 +1358,13 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         pfB.sort()
         pfB1,pfB2,pfB3 = pfB[0],pfB[1],pfB[2]
         p1mB = np.random.randint(-100,100)
-        p1sB = np.random.randint(0,20)
+        p1sB = np.random.randint(0,50)
         p2mB = np.random.randint(-100,100)
-        p2sB = np.random.randint(0,20)
+        p2sB = np.random.randint(0,50)
         p3mB = np.random.randint(-100,100)
-        p3sB = np.random.randint(0,20)
+        p3sB = np.random.randint(0,50)
         p4mB = np.random.randint(-100,100)
-        p4sB = np.random.randint(0,20)
+        p4sB = np.random.randint(0,50)
         
         pfC1 = np.random.random()
         pfC2 = np.random.random()
@@ -491,13 +1373,13 @@ def load_scenario(scenario_id = 1, is_flipped=False):
         pfC.sort()
         pfC1,pfC2,pfC3 = pfC[0],pfC[1],pfC[2]
         p1mC = np.random.randint(-100,100)
-        p1sC = np.random.randint(0,20)
+        p1sC = np.random.randint(0,50)
         p2mC = np.random.randint(-100,100)
-        p2sC = np.random.randint(0,20)
+        p2sC = np.random.randint(0,50)
         p3mC = np.random.randint(-100,100)
-        p3sC = np.random.randint(0,20)
+        p3sC = np.random.randint(0,50)
         p4mC = np.random.randint(-100,100)
-        p4sC = np.random.randint(0,20)
+        p4sC = np.random.randint(0,50)
         
         if pfB1*p1mB+(pfB2-pfB1)*p2mB+(pfB3-pfB2)*p3mB+(1-pfB3)*p4mB > pfC1*p1mC+(pfC2-pfC1)*p2mC+(pfC3-pfC2)*p3mC+(1-pfC3)*p4mC:
             pfB1,pfB2,pfB3,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,p4mB,p4sB,pfC1,pfC2,pfC3,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,p4mC,p4sC = pfC1,pfC2,pfC3,p1mC,p1sC,p2mC,p2sC,p3mC,p3sC,p4mC,p4sC,pfB1,pfB2,pfB3,p1mB,p1sB,p2mB,p2sB,p3mB,p3sB,p4mB,p4sB
@@ -526,12 +1408,12 @@ def load_scenario(scenario_id = 1, is_flipped=False):
                 return np.random.normal(p4mC, p4sC)
         label_C = 'right: 4-modal N('+str(p1mC)+','+str(p1sC)+'):N('+str(p2mC)+','+str(p2sC)+'):N('+str(p3mC)+','+str(p3sC)+'):N('+str(p4mC)+','+str(p4sC)+') = {0:.2f}'.format(pfC1)+':{0:.2f}'.format(pfC2-pfC1)+':{0:.2f}'.format(pfC3-pfC2)+':{0:.2f}'.format(1-pfC3)
 
-        fig_name = './figures/MDP_'+str(scenario_id)+'.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)
         
     if is_flipped:
         reward_from_C, reward_from_B, label_C, label_B = reward_from_B, reward_from_C, label_B, label_C 
-        fig_name = './figures/MDP_'+str(scenario_id)+'_flipped.png'
-    fig_name_flipped = './figures/MDP_'+str(scenario_id)+'_flipped.png'
+        fig_name = './figures/'+prefix+''+keyword+'_'+str(scenario_id)+'_flipped'
+    fig_name_flipped = './figures/'+prefix+''+keyword+'_'+str(scenario_id)+'_flipped'
     kld,crossentropy,sB,sC,sdiff = get_dist_stats(reward_from_B,reward_from_C)
     return label_B,label_C,fig_name,fig_name_flipped,reward_from_B,reward_from_C,kld,crossentropy,sB,sC,sdiff
 

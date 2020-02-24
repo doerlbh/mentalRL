@@ -39,6 +39,32 @@ gp = GaussianProcessRegressor()
 # import sys
 # import threading
 
+# RL algorithms:
+# QL
+# DQL
+# SQL
+# MP
+# PQL
+# NQL
+# MSQL
+# EXP3SQL
+# SWUCBQAgent
+# GPUCBSQL
+# fGPUCBSQL
+
+# Contextual Bandit algorithms:
+# EXP4
+# LinUCB
+# CTS
+# SCTS
+
+# MAB algorithms:
+# HBTS
+# EXP3
+# TS
+# UCB
+# eGreedy
+
 class QLearningAgent(ReinforcementAgent):
     """
       Q-Learning Agent
@@ -55,7 +81,6 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         return self.q_vals[(state, action)]
-
 
     def computeValueFromQValues(self, state):
         """
@@ -93,7 +118,6 @@ class QLearningAgent(ReinforcementAgent):
             elif(this_q == max_val):
                 best_acts.append(a)
         return random.choice(best_acts)
-
 
     def getAction(self, state):
         """
@@ -165,7 +189,9 @@ class PacmanQAgent(QLearningAgent):
         args['ucbalpha'] = ucbalpha
         args['ucbwindow'] = ucbwindow
 
-        self.index = 0  # This is always Pacman
+        self.index = util.Counter() # BL Added: enable index translation
+        self.index_max = 0          # BL Added: enable index translation
+         
         QLearningAgent.__init__(self, **args)
 
     def getAction(self, state):
@@ -178,6 +204,30 @@ class PacmanQAgent(QLearningAgent):
         self.doAction(state,action)
         return action
 
+    # BL Added: enable index translation
+    def featurize(self, feats, isConcise=True):
+        
+        indices = []
+        old_indices = []
+        for i in feats:
+            if i in self.index:
+               old_indices.append(self.index[i])
+            else:
+                self.index[i] = self.index_max
+                self.index_max += 1
+            indices.append(self.index[i])
+        
+        if isConcise:
+            vfeats = np.ndarray(len(feats))            
+        else:
+            vfeats = np.ndarray(self.index_max)
+        for j, i in enumerate(feats):
+            if isConcise:
+                vfeats[j] = feats[i] 
+            else:
+                vfeats[self.index[i]] = feats[i] 
+            
+        return vfeats,indices,old_indices
 
 class QL(PacmanQAgent):
     """
@@ -385,7 +435,31 @@ class SQL(PacmanQAgent):
         PacmanQAgent.final(self, state)
         if self.episodesSoFar == self.numTraining:
             pass
-                
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR MAXPAIN AGENT    #
+#########################################################
+
+class MP(SQL):
+    """
+       MaxPain Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        SQL.__init__(self, **args)
+        
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        feats = self.featExtractor.getFeatures(state, action)
+        
+        nextAction = self.computeActionFromSplitQValues(nextState)
+        difference_qp = self.p2 * positiveReward + self.discount * self.getPosQValue(nextState,nextAction) - self.getPosQValue(state, action)
+        difference_qn = self.n2 * negativeReward + self.discount * self.getNegQValue(nextState,nextAction) - self.getNegQValue(state, action)
+        
+        for i in feats:
+            self.weights_pos[i] = self.p1 * self.weights_pos[i] + self.alpha * difference_qp * feats[i]
+            self.weights_neg[i] = self.n1 * self.weights_neg[i] + self.alpha * difference_qn * feats[i]
+
+                        
 #########################################################
 # BL ADDED: CLASS WRITTEN FOR POSITIVE Q-LEARN AGENT    #
 #########################################################
@@ -739,5 +813,367 @@ class SWUCBQAgent(MSQL):
         
         self.iterations += 1;
         
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR Contextual TS AGENT       #
+#########################################################
+
+class CTS(QL):
+    """
+       Contextual Thompson Sampling Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        QL.__init__(self, **args)
+        
+        self.delta = 0.1
+        self.R = 0.5
+        self.cov = None
+        self.mean = None
+        self.gfeats = None
+        self.gepsilon = 0.05
+ 
+    def featurize(self, feats, isConcise=True):
+        
+        indices = []
+        old_indices = []
+        for i in feats:
+            if i in self.index:
+               old_indices.append(self.index[i])
+            else:
+                self.index[i] = self.index_max
+                self.index_max += 1
+            indices.append(self.index[i])
+        
+        if isConcise:
+            vfeats = np.ndarray(len(feats))            
+        else:
+            vfeats = np.ndarray(self.index_max)
+        for j, i in enumerate(feats):
+            if isConcise:
+                vfeats[j] = feats[i] 
+            else:
+                vfeats[self.index[i]] = feats[i] 
+        
+        if self.mean is None or len(self.mean) != self.index_max: 
+            tmp = 0*np.ndarray(self.index_max)
+            if self.mean is not None:
+                tmp[:len(self.mean)] = self.mean
+            self.mean = tmp
+        
+        if self.cov is None or self.cov.shape[0] != self.index_max: 
+            tmp = np.eye(self.index_max)
+            if self.cov is not None:
+                tmp[:self.cov.shape[0]][:,:self.cov.shape[1]] = self.cov
+            self.cov = tmp
+        
+        if self.gfeats is None or len(self.gfeats) != self.index_max:
+            tmp = 0*np.ndarray(self.index_max)
+            if self.gfeats is not None:
+                tmp[:len(self.gfeats)] = self.gfeats
+            self.gfeats = tmp
+        
+        return vfeats,indices,old_indices
+            
+    def getQValue(self, state, action):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        v2 = (self.R**2) * 24 * len(indices) * math.log(1./self.delta) * (1./self.gepsilon)
+        vector_estimean = np.random.multivariate_normal(self.mean[indices], v2 * np.linalg.inv(self.cov[indices][:,indices]),1).T
+        q = np.dot(vfeats, vector_estimean)     
+        
+        return q
+
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        self.cov[indices][:,indices] = self.cov[indices][:,indices] + vfeats * vfeats.T
+        self.gfeats[indices] = self.gfeats[indices] + reward * vfeats
+        self.mean[indices] = np.dot(np.linalg.inv(self.cov[indices][:,indices]), self.gfeats[indices])
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR Split Contextual TS AGENT #
+#########################################################
+
+class SCTS(SQL):
+    """
+       Split CTS Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        SQL.__init__(self, **args)
+        
+        self.delta = 0.1
+        self.R = 0.5
+        self.cov_p = None
+        self.mean_p = None
+        self.gfeats_p = None
+        self.cov_n = None
+        self.mean_n = None
+        self.gfeats_n = None
+        self.gepsilon = 0.05
+        
+    def featurize(self, feats, isConcise=True):
+        
+        indices = []
+        old_indices = []
+        for i in feats:
+            if i in self.index:
+               old_indices.append(self.index[i])
+            else:
+                self.index[i] = self.index_max
+                self.index_max += 1
+            indices.append(self.index[i])
+        
+        if isConcise:
+            vfeats = np.ndarray(len(feats))            
+        else:
+            vfeats = np.ndarray(self.index_max)
+        for j, i in enumerate(feats):
+            if isConcise:
+                vfeats[j] = feats[i] 
+            else:
+                vfeats[self.index[i]] = feats[i] 
+        
+        if self.mean_p is None or len(self.mean_p) != self.index_max: 
+            tmp_p = 0*np.ndarray(self.index_max)
+            tmp_n = 0*np.ndarray(self.index_max)
+            if self.mean_p is not None:
+                tmp_p[:len(self.mean_p)] = self.mean_p
+                tmp_n[:len(self.mean_n)] = self.mean_n
+            self.mean_p = tmp_p
+            self.mean_n = tmp_n
+        
+        if self.cov_p is None or self.cov_p.shape[0] != self.index_max: 
+            tmp_p = np.eye(self.index_max)
+            tmp_n = np.eye(self.index_max)
+            if self.cov_p is not None:
+                tmp_p[:self.cov_p.shape[0]][:,:self.cov_p.shape[1]] = self.cov_p
+                tmp_n[:self.cov_n.shape[0]][:,:self.cov_n.shape[1]] = self.cov_n
+            self.cov_p = tmp_p
+            self.cov_n = tmp_n
+        
+        if self.gfeats_p is None or len(self.gfeats_p) != self.index_max:
+            tmp_p = 0*np.ndarray(self.index_max)
+            tmp_n = 0*np.ndarray(self.index_max)
+            if self.gfeats_n is not None:
+                tmp_p[:len(self.gfeats_p)] = self.gfeats_p
+                tmp_n[:len(self.gfeats_n)] = self.gfeats_n
+            self.gfeats_p = tmp_p
+            self.gfeats_n = tmp_n
+        
+        return vfeats,indices,old_indices
+    
+    def getPosQValue(self, state, action):   
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        v2 = (self.R**2) * 24 * len(indices) * math.log(1./self.delta) * (1./self.gepsilon)
+        vector_estimean = np.random.multivariate_normal(self.mean_p[indices], v2 * np.linalg.inv(self.cov_p[indices][:,indices]),1).T
+        q = np.dot(vfeats, vector_estimean)     
+        return q
+    
+    def getNegQValue(self, state, action):   
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        v2 = (self.R**2) * 24 * len(indices) * math.log(1./self.delta) * (1./self.gepsilon)
+        vector_estimean = np.random.multivariate_normal(self.mean_n[indices], v2 * np.linalg.inv(self.cov_n[indices][:,indices]),1).T
+        q = np.dot(vfeats, vector_estimean)     
+        return q
+
+    def getSplitQValue(self, state, action):
+        return self.pw * self.getPosQValue(state, action) + self.nw * self.getNegQValue(state, action)
+    
+    def getQValue(self, state, action):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        v2 = (self.R**2) * 24 * len(indices) * math.log(1./self.delta) * (1./self.gepsilon)
+        vector_estimean = np.random.multivariate_normal(self.mean[indices], v2 * np.linalg.inv(self.cov[indices][:,indices]),1).T
+        q = np.dot(vfeats, vector_estimean)     
+        return q
+
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        self.cov_p[indices][:,indices] =  self.p1 * self.cov_p[indices][:,indices] + vfeats * vfeats.T
+        self.gfeats_p[indices] =  self.p1 * self.gfeats_p[indices] + self.p2 * positiveReward * vfeats
+        self.mean_p[indices] = np.dot(np.linalg.inv(self.cov_p[indices][:,indices]), self.gfeats_p[indices])
+
+        self.cov_n[indices][:,indices] =  self.n1 * self.cov_n[indices][:,indices] + vfeats * vfeats.T
+        self.gfeats_n[indices] =  self.n1 * self.gfeats_n[indices] + self.n2 * negativeReward * vfeats
+        self.mean_n[indices] = np.dot(np.linalg.inv(self.cov_n[indices][:,indices]), self.gfeats_n[indices])
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR POSITIVE CTS AGENT        #
+#########################################################
+
+class PCTS(SCTS):
+    """
+       Positive Q-Learning Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        SCTS.__init__(self, **args)
+        self.n2 = 0.0
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR NEGATIVE CTS AGENT        #
+#########################################################
+
+class PCTS(SCTS):
+    """
+       Negative Q-Learning Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        SCTS.__init__(self, **args)
+        self.p2 = 0.0
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR LinUCB AGENT              #
+#########################################################
+
+class LinUCB(QL):
+    """
+       LinUCB Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        QL.__init__(self, **args)
+        
+        self.ucb_alpha = 0.1
+        self.ucb_A = None
+        self.ucb_b = None
+ 
+    def featurize(self, feats, isConcise=True):
+        
+        indices = []
+        old_indices = []
+        for i in feats:
+            if i in self.index:
+               old_indices.append(self.index[i])
+            else:
+                self.index[i] = self.index_max
+                self.index_max += 1
+            indices.append(self.index[i])
+        
+        if isConcise:
+            vfeats = np.ndarray(len(feats))            
+        else:
+            vfeats = np.ndarray(self.index_max)
+        for j, i in enumerate(feats):
+            if isConcise:
+                vfeats[j] = feats[i] 
+            else:
+                vfeats[self.index[i]] = feats[i] 
+        
+        if self.ucb_A is None or self.ucb_A.shape[0] != self.index_max: 
+            tmp = np.eye(self.index_max)
+            if self.ucb_A is not None:
+                tmp[:self.ucb_A.shape[0]][:,:self.ucb_A.shape[1]] = self.ucb_A
+            self.ucb_A = tmp
+        
+        if self.ucb_b is None or len(self.ucb_b) != self.index_max:
+            tmp = 0*np.ndarray(self.index_max)
+            if self.ucb_b is not None:
+                tmp[:len(self.ucb_b)] = self.ucb_b
+            self.ucb_b = tmp
+        
+        return vfeats,indices,old_indices
+            
+    def getQValue(self, state, action):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        theta = np.linalg.inv(self.ucb_A[indices][:,indices]) * self.ucb_b[indices]
+        q = np.dot(vfeats, theta) + self.ucb_alpha * np.sqrt(vfeats.T * np.linalg.inv(self.ucb_A[indices][:,indices]) * vfeats)
+        
+        return q
+
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        self.ucb_A[indices][:,indices] = self.ucb_A[indices][:,indices] + vfeats * vfeats.T
+        self.ucb_b[indices] = self.ucb_b[indices] + reward * vfeats
 
 
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR EXP4 AGENT                #
+#########################################################
+
+class EXP4(QL):
+    """
+       EXP4 Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+        self.featExtractor = util.lookup(extractor, globals())()
+        QL.__init__(self, **args)
+        
+        self.exp4_gamma = 0.05
+        self.exp4_y = util.Counter()
+ 
+    def featurize(self, feats, isConcise=True):
+        
+        indices = []
+        old_indices = []
+        for i in feats:
+            if i in self.index:
+               old_indices.append(self.index[i])
+            else:
+                self.weights[i] = 1
+                self.exp4_y[i] = 0
+                self.index[i] = self.index_max
+                self.index_max += 1
+            indices.append(self.index[i])
+        
+        if isConcise:
+            vfeats = np.ndarray(len(feats))            
+        else:
+            vfeats = np.ndarray(self.index_max)
+        for j, i in enumerate(feats):
+            if isConcise:
+                vfeats[j] = feats[i] 
+            else:
+                vfeats[self.index[i]] = feats[i] 
+        
+        return vfeats,indices,old_indices
+
+    def computeActionFromQValues(self, state):
+        legalActions = self.getLegalActions(state)
+        if not legalActions:  # Empty, i.e. no legal actions
+            return None
+        max_val = -float('inf')
+        best_acts = []
+        p_actions = []
+        for a in legalActions:
+            p_actions.append(self.getQValue(state, a))
+        return np.random.choice(legalActions, 1, p_actions)[0]
+
+    def getQValue(self, state, action):
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        w = 0
+        q = 0
+        for i in feats:
+            w += self.weights[i] 
+            q += feats[i] * self.weights[i]
+        
+        p = (1 - self.exp4_gamma) * q / w + self.exp4_gamma / len(self.getLegalActions(state))
+        return p
+
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        
+        
+        feats = self.featExtractor.getFeatures(state, action)
+        vfeats,indices,old_indices = self.featurize(feats)
+        
+        for i in feats:
+            self.exp4_y[i] = feats[i] * reward / self.getQValue(state, action)
+            self.weights[i] = self.weights[i] * np.exp(self.exp4_gamma * self.exp4_y[i] / len(self.getLegalActions(state)))
+        

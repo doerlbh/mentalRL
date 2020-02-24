@@ -69,13 +69,13 @@ LOSE_PENALTY = -500  # Penalty for losing the game/touching a ghost
 
 TURN_OFF_POS = 0. # BL ADDED: the probability to turn off positive reward
 TURN_OFF_NEG = 0. # BL ADDED: the probability to turn off negative reward
-CHANGE_EVERY = 1000 # BL ADDED: change reward environment every n rounds
+CHANGE_EVERY = 2000 # BL ADDED: change reward environment every n rounds
 USE_SEQ = True # BL ADDED: specify whether to follow a specific sequence
 
 Rmax = TIME_PENALTY + GHOST_BONUS + WIN_BONUS + FOOD_BONUS
 Rmin = TIME_PENALTY + LOSE_PENALTY
 
-np.random.seed(5)
+np.random.seed(1)
 POS_SEQ = [True]
 NEG_SEQ = [True]
 # POS_SEQ = np.random.choice([True,False],5000)
@@ -689,10 +689,13 @@ def loadAgentFromIRL(pacman, nographics):
     for moduleDir in pythonPathDirs:
         if not os.path.isdir(moduleDir): continue
         moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
+#         print moduleNames
         for modulename in moduleNames:
             try:
                 module = __import__(modulename[:-3])
+#                 print "ok" + module
             except ImportError:
+#                 print "wrong" + module
                 continue
             if pacman in dir(module):
                 if nographics and modulename == 'keyboardAgents.py':
@@ -844,11 +847,17 @@ def loadAgent(pacman, nographics):
     for moduleDir in pythonPathDirs:
         if not os.path.isdir(moduleDir): continue
         moduleNames = [f for f in os.listdir(moduleDir) if f.endswith('gents.py')]
+#         print moduleNames
+
         for modulename in moduleNames:
             try:
                 module = __import__(modulename[:-3])
 #                 print module, modulename[:-3]
+#                 print "okay" + module
+
             except ImportError:
+#                 print "wrong" + modulename
+
                 continue
             if pacman in dir(module):
                 if nographics and modulename == 'keyboardAgents.py':

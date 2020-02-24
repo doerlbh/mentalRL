@@ -19,8 +19,8 @@ import string
 import time
 import types
 import Tkinter
-# import multiprocessing
-# import cv2
+import multiprocessing
+import cv2
 
 _Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
@@ -35,43 +35,43 @@ _canvas_tsize = 12
 _canvas_tserifs = 0
 
 
-# # BL ADDED: to enable recording
-# e = multiprocessing.Event()
-# p = None
-
-
-# # BL ADDED: to enable recording
-# # -------begin capturing and saving video
-# def startrecording(e):
-#     cap = cv2.VideoCapture(0)
-#     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-#     out = cv2.VideoWriter('./test.mp4',fourcc, 6.0, (640,480))
-
-#     while(cap.isOpened()):
-#         if e.is_set():
-#             cap.release()
-#             out.release()
-#             cv2.destroyAllWindows()
-#             e.clear()
-#         ret, frame = cap.read()
-#         if ret==True:
-#             out.write(frame)
-#         else:
-#             break
-
-# # BL ADDED: to enable recording
-# def start_recording_process():
-#     global p
-#     p = multiprocessing.Process(target=startrecording, args=(e,))
-#     p.start()
-
-# # BL ADDED: to enable recording
-# # -------end video capture and stop tk
-# def stop_recording_process():
-#     e.set()
-#     p.join()
-# #     root.quit()
-# #     root.destroy()
+# BL ADDED: to enable recording
+e = multiprocessing.Event()
+p = None
+ 
+ 
+# BL ADDED: to enable recording
+# -------begin capturing and saving video
+def startrecording(e):
+    cap = cv2.VideoCapture(0)
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('./test.mp4',fourcc, 6.0, (640,480))
+ 
+    while(cap.isOpened()):
+        if e.is_set():
+            cap.release()
+            out.release()
+            cv2.destroyAllWindows()
+            e.clear()
+        ret, frame = cap.read()
+        if ret==True:
+            out.write(frame)
+        else:
+            break
+ 
+# BL ADDED: to enable recording
+def start_recording_process():
+    global p
+    p = multiprocessing.Process(target=startrecording, args=(e,))
+    p.start()
+ 
+# BL ADDED: to enable recording
+# -------end video capture and stop tk
+def stop_recording_process():
+    e.set()
+    p.join()
+#     root.quit()
+#     root.destroy()
 
 def formatColor(r, g, b):
     return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
@@ -135,7 +135,7 @@ def begin_graphics(width=640, height=480, color=formatColor(0, 0, 0), title=None
     _root_window.bind( "<Control-Button-1>", _ctrl_leftclick)
     _clear_keys()
     
-    # start_recording_process()
+#     start_recording_process()
 
 _leftclick_loc = None
 _rightclick_loc = None
@@ -178,15 +178,15 @@ def draw_background():
 
 def _destroy_window(event=None):
     sys.exit(0)
-#    global _root_window
-#    _root_window.destroy()
-#    _root_window = None
+#     global _root_window
+#     _root_window.destroy()
+#     _root_window = None
     #print "DESTROY"
 
 def end_graphics():
     global _root_window, _canvas, _mouse_enabled
     
-    # stop_recording_process()
+#     stop_recording_process()
 
     try:
         try:

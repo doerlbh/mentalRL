@@ -75,7 +75,7 @@ USE_SEQ = True # BL ADDED: specify whether to follow a specific sequence
 Rmax = TIME_PENALTY + GHOST_BONUS + WIN_BONUS + FOOD_BONUS
 Rmin = TIME_PENALTY + LOSE_PENALTY
 
-np.random.seed(2)
+np.random.seed(1)
 POS_SEQ = np.random.choice([True,False],5000)
 NEG_SEQ = np.random.choice([True,False],5000)
 
