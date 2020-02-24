@@ -32,28 +32,45 @@ Language: Python3, Python2, bash
 
 
 Platform: MacOS, Linux, Windows
-  
+
 by Baihan Lin, Sep 2018
-  
-  
+
+
 ## Citation
 
-If you find this work helpful, please try the models out and cite our work. Thanks!
+If you find this work helpful, please try the models out and cite our works. Thanks!
 
-    @article{lin2019mentalRL,
-      title={{A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry}},
-      author={Lin, Baihan and Cecchi, Guillermo and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina},
-      journal={arXiv preprint arXiv:1906.11286},
-      year={2019}
+**Reinforcement Learning case** (main paper):
+
+    @inproceedings{lin2020astory,
+      title={A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry},
+      author={Lin, Baihan and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina and Cecchi, Guillermo},
+      booktitle = {Proceedings of the Nineteenth International Conference on Autonomous Agents and Multi-Agent Systems, {AAMAS-20}},
+      publisher = {International Foundation for Autonomous Agents and Multiagent Systems},             
+      pages     = {},
+      year      = {2020},
+      month     = {5},
+      doi       = {},
+      url       = {},
     }
 
+**Contextual Bandit case:**
 
+    @inproceedings{lin2020unified,
+      title={Unified Models of Human Behavioral Agents in Bandits, Contextual Bandits, and RL},
+      author={Lin, Baihan and Bouneffouf, Djallel and Cecchi, Guillermo},
+      booktitle={under review},
+      pages={},
+      year={},
+      organization={}
+    }
 
 ## Tasks
 
-* MDP example with multi-modal reward distributions
-* Iowa Gambling Task scheme 1 and 2
-* PacMan game with different stationarities
+* Markov Decision Process (MDP) example with multi-modal reward distributions
+* Multi-Armed Bandits (MAB)  example with multi-modal reward distributions 
+* Iowa Gambling Task (IGT) example scheme 1 and 2
+* PacMan RL game with different stationarities
 
 
 
