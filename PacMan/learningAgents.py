@@ -164,7 +164,7 @@ class ReinforcementAgent(ValueEstimationAgent):
     def isInTesting(self):
         return not self.isInTraining()
 
-    def __init__(self, actionFn = None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1.0, p1=1.0,p2=1.0,n1=1.0,n2=1.0,lr=1e-4,pw=1.0,nw=1.0,ucbbeta=100.,exp3gamma=0.5,ucbalpha=1.,ucbwindow=100,byround=False):
+    def __init__(self, actionFn = None, numTraining=100, epsilon=0.5, alpha=0.5, gamma=1.0, p1=1.0,p2=1.0,n1=1.0,n2=1.0,lr=1e-4,pw=1.0,nw=1.0,ucbbeta=100.,exp3gamma=0.5,ucbalpha=1.,ucbwindow=100,byround=False,e1=1,e2=1,e3=1,e4=1,e5=1,e6=1):
         """
         actionFn: Function which takes a state and returns the list of legal actions
 
@@ -198,6 +198,12 @@ class ReinforcementAgent(ValueEstimationAgent):
         self.byround = bool(byround)
         self.ucbalpha = float(ucbalpha)
         self.ucbwindow = int(ucbwindow)
+        self.e1 = float(e1)
+        self.e2 = float(e2)
+        self.e3 = float(e3)
+        self.e4 = float(e4)
+        self.e5 = float(e5)
+        self.e6 = float(e6)
         
 
     ################################

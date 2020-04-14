@@ -158,7 +158,7 @@ class QLearningAgent(ReinforcementAgent):
 class PacmanQAgent(QLearningAgent):
     "Exactly the same as QLearningAgent, but with different default parameters"
 
-    def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2,p1=1.0,p2=1.0,n1=1.0,n2=1.0,lr=1e-4,pw=1.0,nw=1.0,ucbbeta=100.,exp3gamma=0.5,numTraining=0,ucbalpha=1.,ucbwindow=1000,byround=False, **args):  # BL: Add p1, p2, n1, n2 here to enable TS
+    def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2,p1=1.0,p2=1.0,n1=1.0,n2=1.0,lr=1e-4,pw=1.0,nw=1.0,ucbbeta=100.,exp3gamma=0.5,numTraining=0,ucbalpha=1.,ucbwindow=1000,byround=False,e1=1,e2=1,e3=1,e4=1,e5=1,e6=1,**args):  # BL: Add p1, p2, n1, n2 here to enable TS
         """
         These default parameters can be changed from the pacman.py command line.
         For example, to change the exploration rate, try:
@@ -188,6 +188,12 @@ class PacmanQAgent(QLearningAgent):
         args['byround'] = byround
         args['ucbalpha'] = ucbalpha
         args['ucbwindow'] = ucbwindow
+        args['e1'] = e1 
+        args['e2'] = e2 
+        args['e3'] = e3 
+        args['e4'] = e4 
+        args['e5'] = e5 
+        args['e6'] = e6 
 
         self.index = util.Counter() # BL Added: enable index translation
         self.index_max = 0          # BL Added: enable index translation
@@ -254,6 +260,8 @@ class QL(PacmanQAgent):
         difference = cum_R - self.getQValue(state, action)
         for i in feats:
             self.weights[i] += self.alpha * difference * feats[i]
+#         print reward, self.computeValueFromQValues(nextState), self.getQValue(state, action), difference, self.alpha
+
 
     def final(self, state):
         PacmanQAgent.final(self, state)
@@ -381,14 +389,18 @@ class SQL(PacmanQAgent):
             max_val = max(max_val, self.getPosQValue(state, a))
         return max_val
 
-    def computeValueFromNegQValues(self, state):
+    def computeValueFromNegQValues(self, state, findMax=True):
         legalActions = self.getLegalActions(state)
         if not legalActions:  # Empty, i.e. no legal actions
             return 0.0
-
-        max_val = -float('inf')
-        for a in legalActions:
-            max_val = max(max_val, self.getNegQValue(state, a))
+        
+        if findMax:
+            max_val = -float('inf')
+            for a in legalActions: max_val = max(max_val, self.getNegQValue(state, a))
+        else:
+            max_val = -float('inf')
+            for a in legalActions: max_val = max(max_val, np.abs(self.getNegQValue(state, a)))
+        
         return max_val
 
     def computeActionFromSplitQValues(self, state):
@@ -400,6 +412,7 @@ class SQL(PacmanQAgent):
         best_acts = []
         for a in legalActions:
             this_q = self.getSplitQValue(state, a)
+#             print max_val, this_q, a, best_acts
             if(this_q > max_val):
                 best_acts = [a]
                 max_val = this_q
@@ -445,19 +458,174 @@ class MP(SQL):
        MaxPain Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
-        
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(MP,self).__init__(extractor=extractor,**args)
+
     def update(self, state, action, nextState, reward, positiveReward, negativeReward):
         feats = self.featExtractor.getFeatures(state, action)
         
         nextAction = self.computeActionFromSplitQValues(nextState)
-        difference_qp = self.p2 * positiveReward + self.discount * self.getPosQValue(nextState,nextAction) - self.getPosQValue(state, action)
-        difference_qn = self.n2 * negativeReward + self.discount * self.getNegQValue(nextState,nextAction) - self.getNegQValue(state, action)
+        if nextAction is not None:
+            difference_qp = self.p2 * positiveReward + self.discount * self.getPosQValue(nextState,nextAction) - self.getPosQValue(state, action)
+            difference_qn = self.n2 * negativeReward + self.discount * self.getNegQValue(nextState,nextAction) - self.getNegQValue(state, action)
         
+            for i in feats:
+                self.weights_pos[i] = self.p1 * self.weights_pos[i] + self.alpha * difference_qp * feats[i]
+                self.weights_neg[i] = self.n1 * self.weights_neg[i] + self.alpha * difference_qn * feats[i]
+
+
+#########################################################
+# BL ADDED: CLASS WRITTEN FOR MAXPAIN AGENT    #
+#########################################################
+
+class EQL(SQL):
+    """
+       Emotional Q Learning Agent
+    """
+    def __init__(self,extractor='IdentityExtractor',**args):
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self,**args)
+        super(EQL,self).__init__(extractor=extractor,**args)
+        
+        self.last_pos_r = None
+        self.last_neg_r = None
+        self.last_pos_td = None
+        self.last_neg_td = None
+        self.last_pos_v = None
+        self.last_neg_v = None
+        
+        p1_set = [0.99,1]
+        p2_set = [0.99,1,1.01]
+        n1_set = [0.99,1]
+        n2_set = [0.99,1,1.01]
+        actions = []
+        for p1 in p1_set:
+            for p2 in p2_set:
+                for n1 in n1_set:
+                    for n2 in n2_set: 
+                        actions.append([p1,p2,n1,n2])
+        self.eActions = actions
+        self.weights_e = util.Counter()
+         
+    def getWeights(self):
+        return [self.weights,self.weights_pos,self.weights_neg,self.weights_e]
+ 
+    def getEmoQValue(self, state, action):
+#         feats = self.featExtractor.getFeatures(state, action)
+        q = 0
+#         for i in feats:
+#             q += feats[i] * self.weights_e[i]
+        if self.last_pos_r is not None: q += self.last_pos_r * self.e1 * self.weights_e['pr']
+        if self.last_pos_r is not None: q += self.last_neg_r * self.e2 * self.weights_e['nr']
+        if self.last_pos_td is not None: q += self.last_pos_td * self.e3 * self.weights_e['ptd']
+        if self.last_neg_td is not None: q += self.last_neg_td * self.e4 * self.weights_e['ntd']
+        if self.last_pos_v is not None: q += self.last_pos_v * self.e5 * self.weights_e['pv']
+        if self.last_neg_v is not None: q += self.last_neg_v * self.e6 * self.weights_e['nv']
+        return q
+ 
+    def getEmoLegalActions(self,state):
+        return self.eActions
+ 
+    def computeValueFromEmoQValues(self, state):
+        legalActions = self.getEmoLegalActions(state)
+        if not legalActions:  # Empty, i.e. no legal actions
+            return 0.0
+        max_val = -float('inf')
+        for a in legalActions:
+            max_val = max(max_val, self.getEmoQValue(state, a))
+        return max_val
+ 
+    def computeActionFromEmoQValues(self, state):
+        """
+          Compute the best action to take in a state.  Note that if there
+          are no legal actions, which is the case at the terminal state,
+          return None.
+        """
+        legalActions = self.getEmoLegalActions(state)
+        if not legalActions:  # Empty, i.e. no legal actions
+            return None
+ 
+        max_val = -float('inf')
+        best_acts = []
+        for a in legalActions:
+            this_q = self.getEmoQValue(state, a)
+            if(this_q > max_val):
+                best_acts = [a]
+                max_val = this_q
+            elif(this_q == max_val):
+                best_acts.append(a)
+        if len(best_acts) == 0:
+            return random.choice(legalActions)
+        else:
+            return random.choice(best_acts)
+ 
+ 
+    def getAction(self, state):
+        legalActions = self.getLegalActions(state)
+        action = None
+         
+        if not legalActions:
+            return None
+        r = util.flipCoin(self.epsilon)
+        if r:
+            action = random.choice(legalActions)
+        else:
+            action = self.computeActionFromSplitQValues(state)
+         
+        self.doAction(state,action)
+         
+        eActions = self.getEmoLegalActions(state)
+        action_e = None
+          
+        if not eActions:
+            return None
+        r = util.flipCoin(self.epsilon)
+        if r:
+            action_e = random.choice(eActions)
+        else:
+            action_e = self.computeActionFromEmoQValues(state)
+          
+        self.p1 = action_e[0]
+        self.p2 = action_e[1]
+        self.n1 = action_e[2]
+        self.n2 = action_e[3]
+          
+        print 'p1: ', action_e[0]
+        print 'p2: ', action_e[1]
+        print 'n1: ', action_e[2]
+        print 'n2: ', action_e[3]
+        print action_e
+  
+        return action
+ 
+    def update(self, state, action, nextState, reward, positiveReward, negativeReward):
+        feats = self.featExtractor.getFeatures(state, action)
+         
+#         difference_q = reward + self.discount * self.computeValueFromQValues(nextState) - self.getQValue(state, action)        
+        difference_qp = self.p2 * positiveReward + self.discount * self.computeValueFromPosQValues(nextState) - self.getPosQValue(state, action)
+        difference_qn = self.n2 * negativeReward + self.discount * self.computeValueFromNegQValues(nextState) - self.getNegQValue(state, action)
+ 
         for i in feats:
             self.weights_pos[i] = self.p1 * self.weights_pos[i] + self.alpha * difference_qp * feats[i]
             self.weights_neg[i] = self.n1 * self.weights_neg[i] + self.alpha * difference_qn * feats[i]
+#             self.weights[i] += self.alpha * difference_q * feats[i]
+             
+        difference_qe = reward + self.discount * self.computeValueFromEmoQValues(nextState) - self.getEmoQValue(state, [self.p1,self.p2,self.n1,self.n2])        
+#           
+        self.last_pos_r = positiveReward
+        self.last_neg_r = -negativeReward
+        self.last_pos_td = difference_qp
+        self.last_neg_td = difference_qn
+        self.last_pos_v = self.computeValueFromPosQValues(nextState)
+        self.last_neg_v = self.computeValueFromNegQValues(nextState,False)
+    
+        self.weights_e['pr'] += self.last_pos_r * self.alpha * difference_qe
+        self.weights_e['nr'] += self.last_neg_r * self.alpha * difference_qe
+        self.weights_e['ptd'] += self.last_pos_td * self.alpha * difference_qe
+        self.weights_e['ntd'] += self.last_neg_td * self.alpha * difference_qe
+        self.weights_e['pv'] += self.last_pos_v * self.alpha * difference_qe
+        self.weights_e['nv'] += self.last_neg_v * self.alpha * difference_qe
 
                         
 #########################################################
@@ -469,8 +637,10 @@ class PQL(SQL):
        Positive Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(PQL,self).__init__(extractor=extractor,**args)
+
         self.weights_pos = util.Counter()
         self.weights_neg = util.Counter()
         self.n2 = 0.0
@@ -484,8 +654,9 @@ class NQL(SQL):
        Negative Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(NQL,self).__init__(extractor=extractor,**args)
         self.weights_pos = util.Counter()
         self.weights_neg = util.Counter()
         self.p2 = 0.0
@@ -499,18 +670,26 @@ class GPUCBSQL(SQL):
        GPUCB-based Split Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(GPUCBSQL,self).__init__(extractor=extractor,**args)
         self.weights_pos = util.Counter()
         self.weights_neg = util.Counter()
         self.iterations = 1
 
-        p1range=np.arange(0,2.1,0.5)
-        p2range=np.arange(0,2.1,0.5)
+        p1range=np.array([0.99,1])
+        p2range=np.array([0.99,1,1.01])
         pwrange=np.array([1])
-        n1range=np.arange(0,2.1,0.5)
-        n2range=np.arange(0,2.1,0.5)
+        n1range=np.array([0.99,1])
+        n2range=np.array([0.99,1,1.01])
         nwrange=np.array([1])
+        
+#         p1range=np.arange(0,2.1,0.5)
+#         p2range=np.arange(0,2.1,0.5)
+#         pwrange=np.array([1])
+#         n1range=np.arange(0,2.1,0.5)
+#         n2range=np.arange(0,2.1,0.5)
+#         nwrange=np.array([1])
         
         self.meshgrid = np.array(np.meshgrid(p1range,p2range,pwrange,n1range,n2range,nwrange))
 
@@ -600,8 +779,9 @@ class fGPUCBSQL(GPUCBSQL):
        Full GPUCB-based Split Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        GPUCBSQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         GPUCBSQL.__init__(self, **args)
+        super(fGPUCBSQL,self).__init__(extractor=extractor,**args)
 
         p1range=np.arange(0,2.1,0.5)
         p2range=np.arange(0,2.1,0.5)
@@ -627,8 +807,10 @@ class MSQL(SQL):
     """
     def __init__(self,extractor='IdentityExtractor',**args):
         
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(MSQL,self).__init__(extractor=extractor,**args)
+
         self.iterations = 1
         self.round = 0
 
@@ -708,8 +890,9 @@ class EXP3SQL(MSQL):
     """
     def __init__(self,extractor='IdentityExtractor',**args):
         
-        self.featExtractor = util.lookup(extractor, globals())()
-        MSQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         MSQL.__init__(self, **args)
+        super(EXP3SQL,self).__init__(extractor=extractor,**args)
 
         # for EXP3
         self.exp3weights = [1.0 for i in range(self.n_policies)]
@@ -767,14 +950,15 @@ class EXP3SQL(MSQL):
 # BL ADDED: CLASS WRITTEN FOR Sliding Window UCB-based SPLIT Q-LEARN AGENT  #
 #############################################################################
 
-class SWUCBQAgent(MSQL):
+class SWUCBSQL(MSQL):
     """
-       SWUCB-based SPLIT Q-Learning Agent
+       SWUCB-based Split Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
         
-        self.featExtractor = util.lookup(extractor, globals())()
-        MSQL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         MSQL.__init__(self, **args)
+        super(SWUCBSQL,self).__init__(extractor=extractor,**args)
 
         # for SWUCB
         self.last_rewards = np.zeros(self.ucbwindow)  #: Keep in memory all the rewards obtained in the last :math:`\tau` steps.
@@ -822,9 +1006,10 @@ class CTS(QL):
        Contextual Thompson Sampling Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        QL.__init__(self, **args)
-        
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         QL.__init__(self, **args)
+        super(CTS,self).__init__(extractor=extractor,**args)
+
         self.delta = 0.1
         self.R = 0.5
         self.cov = None
@@ -901,9 +1086,10 @@ class SCTS(SQL):
        Split CTS Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SQL.__init__(self, **args)
-        
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SQL.__init__(self, **args)
+        super(SCTS,self).__init__(extractor=extractor,**args)
+
         self.delta = 0.1
         self.R = 0.5
         self.cov_p = None
@@ -1016,21 +1202,25 @@ class PCTS(SCTS):
        Positive Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SCTS.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SCTS.__init__(self, **args)
+        super(PCTS,self).__init__(extractor=extractor,**args)
+
         self.n2 = 0.0
 
 #########################################################
 # BL ADDED: CLASS WRITTEN FOR NEGATIVE CTS AGENT        #
 #########################################################
 
-class PCTS(SCTS):
+class NCTS(SCTS):
     """
        Negative Q-Learning Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        SCTS.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         SCTS.__init__(self, **args)
+        super(NCTS,self).__init__(extractor=extractor,**args)
+
         self.p2 = 0.0
 
 #########################################################
@@ -1042,9 +1232,10 @@ class LinUCB(QL):
        LinUCB Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        QL.__init__(self, **args)
-        
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         QL.__init__(self, **args)
+        super(LinUCB,self).__init__(extractor=extractor,**args)
+
         self.ucb_alpha = 0.1
         self.ucb_A = None
         self.ucb_b = None
@@ -1089,8 +1280,8 @@ class LinUCB(QL):
         feats = self.featExtractor.getFeatures(state, action)
         vfeats,indices,old_indices = self.featurize(feats)
         
-        theta = np.linalg.inv(self.ucb_A[indices][:,indices]) * self.ucb_b[indices]
-        q = np.dot(vfeats, theta) + self.ucb_alpha * np.sqrt(vfeats.T * np.linalg.inv(self.ucb_A[indices][:,indices]) * vfeats)
+        theta = np.linalg.inv(self.ucb_A[indices][:,indices]).dot(self.ucb_b[indices])
+        q = vfeats.dot(theta) + self.ucb_alpha * np.sqrt(vfeats.T.dot(np.linalg.inv(self.ucb_A[indices][:,indices])).dot(vfeats))
         
         return q
 
@@ -1111,8 +1302,9 @@ class EXP4(QL):
        EXP4 Agent
     """
     def __init__(self,extractor='IdentityExtractor',**args):
-        self.featExtractor = util.lookup(extractor, globals())()
-        QL.__init__(self, **args)
+#         self.featExtractor = util.lookup(extractor, globals())()
+#         QL.__init__(self, **args)
+        super(EXP4,self).__init__(extractor=extractor,**args)
         
         self.exp4_gamma = 0.05
         self.exp4_y = util.Counter()
