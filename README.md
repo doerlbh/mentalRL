@@ -51,7 +51,7 @@ If you find this work helpful, please try the models out and cite our works. Tha
       author={Lin, Baihan and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina and Cecchi, Guillermo},
       booktitle = {Proceedings of the Nineteenth International Conference on Autonomous Agents and Multi-Agent Systems, {AAMAS-20}},
       publisher = {International Foundation for Autonomous Agents and Multiagent Systems},             
-      pages     = {},
+      pages     = {744-752},
       year      = {2020},
       month     = {5},
       doi       = {},
@@ -60,13 +60,11 @@ If you find this work helpful, please try the models out and cite our works. Tha
 
 **Contextual Bandit case:**
 
-    @inproceedings{lin2020unified,
+    @article{lin2020unified,
       title={Unified Models of Human Behavioral Agents in Bandits, Contextual Bandits, and RL},
       author={Lin, Baihan and Bouneffouf, Djallel and Cecchi, Guillermo},
-      booktitle={under review},
-      pages={},
-      year={},
-      organization={}
+      journal={arXiv preprint arXiv:2005.04544},
+      year={2020}
     }
 
 ## Tasks
