@@ -48,7 +48,7 @@ If you find this work helpful, please try the models out and cite our works. Tha
 
     @inproceedings{lin2020astory,
       title={A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry},
-      author={Lin, Baihan and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina and Cecchi, Guillermo},
+      author={Lin, Baihan and Cecchi, Guillermo and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina},
       booktitle = {Proceedings of the Nineteenth International Conference on Autonomous Agents and Multi-Agent Systems, {AAMAS-20}},
       publisher = {International Foundation for Autonomous Agents and Multiagent Systems},             
       pages     = {744-752},
@@ -62,7 +62,7 @@ If you find this work helpful, please try the models out and cite our works. Tha
 
     @article{lin2020unified,
       title={Unified Models of Human Behavioral Agents in Bandits, Contextual Bandits, and RL},
-      author={Lin, Baihan and Bouneffouf, Djallel and Cecchi, Guillermo},
+      author={Lin, Baihan and Cecchi, Guillermo and Bouneffouf, Djallel and Reinen, Jenna and Rish, Irina},
       journal={arXiv preprint arXiv:2005.04544},
       year={2020}
     }
