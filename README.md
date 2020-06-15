@@ -11,7 +11,9 @@ Code for our *AAMAS 2020* paper:
 
 **"A Story of Two Streams: Reinforcement Learning Models from Human Behavior and Neuropsychiatry"** 
 
-by [Baihan Lin](http://www.columbia.edu/~bl2681/) (Columbia), [Guillermo Cecchi](https://researcher.watson.ibm.com/researcher/view.php?person=us-gcecchi) (IBM Research), [Djallel Bouneffouf](https://scholar.google.com/citations?user=i2a1LUMAAAAJ&hl=en) (IBM Research), [Jenna Reinen](http://campuspress.yale.edu/jennareinen/) (IBM Research) and [Irina Rish](https://sites.google.com/site/irinarish/) (Mila, UdeM). 
+by [Baihan Lin](http://www.columbia.edu/~bl2681/) (Columbia)*, [Guillermo Cecchi](https://researcher.watson.ibm.com/researcher/view.php?person=us-gcecchi) (IBM Research), [Djallel Bouneffouf](https://scholar.google.com/citations?user=i2a1LUMAAAAJ&hl=en) (IBM Research), [Jenna Reinen](http://campuspress.yale.edu/jennareinen/) (IBM Research) and [Irina Rish](https://sites.google.com/site/irinarish/) (Mila, UdeM). 
+
+*Corresponding
 
 
 
@@ -66,6 +68,8 @@ If you find this work helpful, please try the models out and cite our works. Tha
       journal={arXiv preprint arXiv:2005.04544},
       year={2020}
     }
+
+
 
 ## Tasks
 
