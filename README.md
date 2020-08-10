@@ -59,6 +59,19 @@ If you find this work helpful, please try the models out and cite our works. Tha
       doi       = {},
       url       = {},
     }
+    
+    
+    @inproceedings{lin2019split,
+      title     = {Split Q Learning: Reinforcement Learning with Two-Stream Rewards},
+      author    = {Lin, Baihan and Bouneffouf, Djallel and Cecchi, Guillermo},
+      booktitle = {Proceedings of the Twenty-Eighth International Joint Conference on
+                   Artificial Intelligence, {IJCAI-19}},
+      publisher = {International Joint Conferences on Artificial Intelligence Organization},             
+      pages     = {6448--6449},
+      year      = {2019},
+      month     = {7},
+    }
+    
 
 **Contextual Bandit case:**
 
