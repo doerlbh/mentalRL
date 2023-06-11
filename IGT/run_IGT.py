@@ -16,8 +16,8 @@ if __name__ == '__main__':
     prefix = ''
     fig_name,reward_from_A,reward_from_B,reward_from_C,reward_from_D = load_IGT(scenario_id,prefix=prefix)
 
-    algorithms = ('choose_a', 'QL','DQL','SARSA')
-    names = ('choose_a', 'QL','DQL','SARSA')
+    algorithms = ('choose_a', 'QL','DQL','SARSA','SQL','SQL2','MP','PQL','NQL')
+    names = ('choose_a', 'QL','DQL','SARSA','SQL','SQL2','MP','PQL','NQL')
     # init report variables that will hold all the results
 
     algorithms_m = ('AD','ADD','ADHD','bvFTD','CP','PD','M')

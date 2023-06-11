@@ -88,6 +88,7 @@ class MDP():
         self.Q1,self.Q2 = {},{}
 
     def choose_action(self, s, a):
+        '''Select action a if available for state s, otherwise select the first action in s.'''
         if a in self.actionsPerState[s]:
             return a
         return self.actionsPerState[s][0]
@@ -286,6 +287,7 @@ class MDP():
                 if self.algorithm == 'eGreedy' and N[s] > len(self.actionsPerState[s]):
                     a = self.random_action(s, a, 0.05) # apply epsilon greedy selection (including for action chosen at STATE A)
                 if self.algorithm == 'choose_a':
+                    # choose_a always executes action A (i.e. action with index 0) if s is non-terminal
                     a = self.choose_action(s, 0)
 
                 N[s] += 1 #update the number of visits for state s
@@ -344,7 +346,12 @@ class MDP():
         Q1Ar = np.ndarray((self.nTrials,self.T))
         Q2Ar = np.ndarray((self.nTrials,self.T))
         reward = np.ndarray((self.nTrials,self.T))
-        cumreward, pos_reward, neg_reward, actions = np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T))
+        cumreward, pos_reward, neg_reward, actions = (
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+        )
 
         for k in range(self.nTrials):
             tmp = self.experiment()
@@ -781,7 +788,8 @@ class IGT(MDP):
    
     def run(self):
         report = {}
-        count, percent = np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T))
+        count = np.ndarray((self.nTrials,self.T))
+        percent = np.ndarray((self.nTrials,self.T))
         Q1Ia = np.ndarray((self.nTrials,self.T))
         Q2Ia = np.ndarray((self.nTrials,self.T))
         Q1Ib = np.ndarray((self.nTrials,self.T))
@@ -790,7 +798,14 @@ class IGT(MDP):
         Q2Ic = np.ndarray((self.nTrials,self.T))
         Q1Id = np.ndarray((self.nTrials,self.T))
         Q2Id = np.ndarray((self.nTrials,self.T))
-        cumreward, reward, pos_reward, neg_reward, actions = np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T)), np.ndarray((self.nTrials,self.T))
+        cumreward, reward, pos_reward, neg_reward, actions = (
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+        )
+
     
         #run batch of experiments
         for k in range(self.nTrials):
