@@ -86,6 +86,12 @@ class MDP():
         
         # init Q values
         self.Q1,self.Q2 = {},{}
+
+    def choose_action(self, s, a):
+        '''Select action a if available for state s, otherwise select the first action in s.'''
+        if a in self.actionsPerState[s]:
+            return a
+        return self.actionsPerState[s][0]
         
     def getQaddition(self,pw=1,nw=1):
         Qprime = {}
@@ -182,7 +188,7 @@ class MDP():
         return Qprime
 
     def resetQprimeFunction(self):
-        if self.algorithm in ['DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M']:
+        if self.algorithm in ['choose_a', 'DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M']:
             self.fQprime = self.getQaddition
         elif self.algorithm in ['UCB']:
             self.fQprime = self.getQUCB
@@ -202,7 +208,7 @@ class MDP():
     # reset the variables, to be called on each experiment
     def reset(self):
         self.resetQprimeFunction()
-        if self.algorithm in ['DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M','CTS','SCTS','PCTS','NCTS','cADD','cADHD','cAD','cCP','cbvFTD','cPD','cM']:
+        if self.algorithm in ['choose_a', 'DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M','CTS','SCTS','PCTS','NCTS','cADD','cADHD','cAD','cCP','cbvFTD','cPD','cM']:
             defaultQ = 0
         else:
             defaultQ = 1
@@ -276,12 +282,14 @@ class MDP():
             while not gameover:
                 actions = a
                 t += 1  # record learning steps
-                
                 if self.algorithm in ['DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M']:
                     a = self.random_action(s, a, 0.05) # apply epsilon greedy selection (including for action chosen at STATE A)
                 if self.algorithm == 'eGreedy' and N[s] > len(self.actionsPerState[s]):
                     a = self.random_action(s, a, 0.05) # apply epsilon greedy selection (including for action chosen at STATE A)
-                
+                if self.algorithm == 'choose_a':
+                    # choose_a always executes action A (i.e. action with index 0) if s is non-terminal
+                    a = self.choose_action(s, 0)
+
                 N[s] += 1 #update the number of visits for state s
 
                 # if left action is chosen at state A, increment the counter
@@ -338,7 +346,12 @@ class MDP():
         Q1Ar = np.ndarray((self.nTrials,self.T))
         Q2Ar = np.ndarray((self.nTrials,self.T))
         reward = np.ndarray((self.nTrials,self.T))
-        cumreward = pos_reward = neg_reward = actions = np.ndarray((self.nTrials,self.T))
+        cumreward, pos_reward, neg_reward, actions = (
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+        )
 
         for k in range(self.nTrials):
             tmp = self.experiment()
@@ -417,6 +430,12 @@ class MDP():
         if self.algorithm == 'MP':
             Qprime = self.fQprime()
             nxt_a, maxq = self.maxQA(Qprime, s)
+
+        if self.algorithm == 'choose_a':
+            Qprime = self.fQprime()
+            _, maxq = self.maxQA(Qprime, s)
+            # always choose action a
+            nxt_a = self.choose_action(s, 0)
                                    
         if self.algorithm in ['SQL','ESQL','PQL','NQL','AD','ADD','ADHD','CP','bvFTD','PD','M']:
             Qprime = self.fQprime()
@@ -462,7 +481,7 @@ class MDP():
         
         nxt_a, maxq, isQ1forDQL = self.act(nxt_s,a,N,NSA)
 
-        if self.algorithm == 'SARSA':
+        if self.algorithm in ['SARSA', 'choose_a']:
             # self.Q1[s][a] = self.Q1[s][a] + alpha * (r + self.GAMMA * self.getExpected(Q1s) - self.Q1[s][a])
             self.Q1[s][a] = self.Q1[s][a] + alpha * (r + self.GAMMA * self.Q1[nxt_s][nxt_a] - self.Q1[s][a])
         
@@ -708,11 +727,13 @@ class IGT(MDP):
                 actions = a
                 # record learning steps
                 t += 1
-                
+        
                 if self.algorithm in ['DQL','QL','SARSA','MP','SQL','SQL2','PQL','NQL','MP','ESQL','DSQL','ADD','ADHD','AD','CP','bvFTD','PD','M']:
                     a = self.random_action(s, a, 0.05) # apply epsilon greedy selection (including for action chosen at STATE A)
                 if self.algorithm == 'eGreedy' and N[s] > len(self.actionsPerState[s]):
                     a = self.random_action(s, a, 0.05) # apply epsilon greedy selection (including for action chosen at STATE A)
+                if self.algorithm == 'choose_a':
+                    a = self.choose_action(s, 0)
 
                 #update the number of visits for state s
                 N[s] += 1
@@ -767,7 +788,8 @@ class IGT(MDP):
    
     def run(self):
         report = {}
-        count = percent = np.ndarray((self.nTrials,self.T))
+        count = np.ndarray((self.nTrials,self.T))
+        percent = np.ndarray((self.nTrials,self.T))
         Q1Ia = np.ndarray((self.nTrials,self.T))
         Q2Ia = np.ndarray((self.nTrials,self.T))
         Q1Ib = np.ndarray((self.nTrials,self.T))
@@ -776,7 +798,14 @@ class IGT(MDP):
         Q2Ic = np.ndarray((self.nTrials,self.T))
         Q1Id = np.ndarray((self.nTrials,self.T))
         Q2Id = np.ndarray((self.nTrials,self.T))
-        cumreward = reward = pos_reward = neg_reward = actions = np.ndarray((self.nTrials,self.T))
+        cumreward, reward, pos_reward, neg_reward, actions = (
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+            np.ndarray((self.nTrials, self.T)),
+        )
+
     
         #run batch of experiments
         for k in range(self.nTrials):
